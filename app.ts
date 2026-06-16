@@ -9,14 +9,17 @@ app.use(cors({
     origin: ['http://localhost:4200'],
     credentials:true
 }))
-const port = process.env.PORT || 3000;
 app.use(express.json());
 app.get('/healthcheck', (req, res) => {
     console.log("welcome to expense healthcheck");
     return res.send({ message: "welcome to expense healthcheck" });
 });
+app.get('/expense/healthcheck',()=>{
+    console.log('Expense Health Good :)');
+})
 app.use('/api/auth', loginRouter);
 app.use('/api/expense', expenseRouter);
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log('Listening PORT:::', port);
 })
