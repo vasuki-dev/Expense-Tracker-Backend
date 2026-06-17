@@ -7,15 +7,16 @@ const app = express();
 dotenv.config();
 app.use(cors({
     origin: ['http://localhost:4200'],
-    credentials:true
+    credentials: true
 }))
 app.use(express.json());
 app.get('/healthcheck', (req, res) => {
     console.log("welcome to expense healthcheck");
     return res.send({ message: "welcome to expense healthcheck" });
 });
-app.get('/expense/healthcheck',()=>{
+app.get('/expense/healthcheck', (req, res) => {
     console.log('Expense Health Good :)');
+    res.status(200).send({ message: 'Expense Health Good' });
 })
 app.use('/api/auth', loginRouter);
 app.use('/api/expense', expenseRouter);
