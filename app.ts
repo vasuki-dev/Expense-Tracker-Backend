@@ -6,7 +6,7 @@ import cors from "cors";
 const app = express();
 dotenv.config();
 app.use(cors({
-    origin: ['http://localhost:4200', 'https://expense-tracker-backend-czzz.onrender.com'],
+    origin: ['http://localhost:4200', 'https://expense-tracker-ui-khaki.vercel.app'],
     credentials: true
 }))
 app.use(express.json());
