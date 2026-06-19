@@ -10,9 +10,9 @@ app.use(cors({
     credentials: true
 }))
 app.use(express.json());
-app.get('/healthcheck', (req, res) => {
+app.get('/expense/healthcheck', (req, res) => {
     console.log("welcome to expense healthcheck");
-    return res.send({ message: "hii welcome to expense healthcheck" });
+    return res.send({ message: "welcome to expense healthcheck" });
 });
 app.use('/api/auth', loginRouter);
 app.use('/api/expense', expenseRouter);
