@@ -3,9 +3,9 @@ import { Request, Response } from "express";
 export const dbConnect = async (req: Request, res: Response, next: any) => {
     try {
 
-        let localURL = 'mongodb://localhost:27017/expense-tracker';
         const password = encodeURIComponent("$admin46!");
         let url = `mongodb+srv://expenseadmin:${password}@cluster0.64rxymr.mongodb.net/?appName=Cluster0`;
+        // let url = 'mongodb://localhost:27017/expense-tracker';
         await mongoose.connect(url);
         console.log("DB Connected.");
         next();

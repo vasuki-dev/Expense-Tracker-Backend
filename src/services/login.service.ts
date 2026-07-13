@@ -19,7 +19,16 @@ export class loginService {
         }
         let token = await JWTToken.generateToken(user);
         let refreshToken = await JWTToken.generateRefreshToken(user);
-        return res.status(200).json({ status: "ok", message: "Login working fine", token, refreshToken });
+        //RefresToken store in the DB
+        user.refreshToken = refreshToken;
+        await user.save();
+        return res.status(200).json({
+            status: "ok", message: "Login working fine", token, refreshToken, userdetails: {
+                userCode: user.userCode,
+                role: user.role,
+                userName: user.userName
+            }
+        });
     };
     createUser = async (req: Request, res: Response) => {
         console.log(req.body, '----------------> req body');
@@ -35,7 +44,7 @@ export class loginService {
         return res.status(200).json({ status: "ok", message: "user created." });
     }
     refreshToken = async (req: Request, res: Response) => {
-        let refreshtoken = req.headers.refreshToken as string || "";
+        let refreshtoken = req.body.refreshToken as string || "";
         if (!refreshtoken) {
             return res.status(401).send("No refresh token");
         }
@@ -48,8 +57,9 @@ export class loginService {
             );
 
             // ✅ check in DB (important)
-            const user = await userModel.findById(decoded.id);
-
+            const user = await userModel.findOne({
+                userCode: decoded.id
+            });
             if (!user || user?.refreshToken !== refreshtoken) {
                 return res.status(403).send("Invalid refresh token");
             }
