@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';
 import JWTToken from "../utils/generateToken";
 import { userModel } from "../model/user.model";
+import { counterModel } from "../model/counter.model";
 
 export class loginService {
     login = async (req: Request, res: Response) => {
@@ -45,54 +46,65 @@ export class loginService {
 
         } = req.body;
         const hashPassword = await bcrypt.hash(password, 10);
-        const lastUser = await userModel
-            .findOne()
-            .sort({ userCode: -1 });
 
-        let userCode = "USR001";
+        const counter = await counterModel.findOneAndUpdate(
+            { _id: "userCode" },
+            { $inc: { seq: 1 } },
+            {
+                upsert: true,
+                returnDocument: "after"
+            }
+        );
 
-        if (lastUser) {
+        const userCode = `U${String(counter!.seq).padStart(3, "0")}`;
+        // const lastUser = await userModel
+        //     .findOne()
+        //     .sort({ userCode: -1 });
 
-            const number = lastUser.userCode ? parseInt(
+        // let userCode = "USR001";
 
-                lastUser.userCode.replace("USR", "")
+        // if (lastUser) {
 
-            ) : 0;
+        //     const number = lastUser.userCode ? parseInt(
 
-            userCode =
+        //         lastUser.userCode.replace("USR", "")
 
-                "USR" +
+        //     ) : 0;
 
-                String(number + 1)
+        //     userCode =
 
-                    .padStart(3, "0");
+        //         "USR" +
 
-        }
-        const alreadyExists = await userModel.findOne({
+        //         String(number + 1)
 
-            $or: [
+        //             .padStart(3, "0");
 
-                { userName },
+        // }
+        // const alreadyExists = await userModel.findOne({
 
-                { email },
+        //     $or: [
 
-                { mobile }
+        //         { userName },
 
-            ]
+        //         { email },
 
-        });
+        //         { mobile }
 
-        if (alreadyExists) {
+        //     ]
 
-            return res.status(400).json({
+        // });
 
-                status: "error",
+        // if (alreadyExists) {
 
-                message: "Username, Email or Mobile already exists."
+        //     return res.status(400).json({
 
-            });
+        //         status: "error",
 
-        }
+        //         message: "Username, Email or Mobile already exists."
+
+        //     });
+
+        // }
         const user = await userModel.create({
 
             userCode,
