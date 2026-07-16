@@ -8,12 +8,10 @@ import { counterModel } from "../model/counter.model";
 export class loginService {
     login = async (req: Request, res: Response) => {
         const { userName, password } = req?.body;
-        const hashPassword = await bcrypt.hash(password, 10);
         const user: any = await userModel.findOne({ userName });
         if (!user) {
             return res.status(404).json({ status: "error", message: "User not found" });
         }
-        console.log(user, 'user data');
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(401).json({ status: "error", message: "Invalid password" });
@@ -35,7 +33,6 @@ export class loginService {
         });
     };
     createUser = async (req: Request, res: Response) => {
-        console.log(req.body, '----------------> req body');
         const {
 
             fullName,

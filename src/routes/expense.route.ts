@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { dbConnect } from "../config/dbConfig";
 import verifyToken from "../middleware/verifyToken";
 import expensecontroller from "../controllers/expense.controller";
 import multer from "multer";
@@ -30,18 +29,18 @@ export const upload = multer({
 });
 const expenseRouter = Router();
 
-expenseRouter.post('/list', verifyToken, dbConnect, expensecontroller.getExpenseList);
-expenseRouter.get('/categorylist', verifyToken, dbConnect, expensecontroller.getCategoryList);
+expenseRouter.post('/list', verifyToken,  expensecontroller.getExpenseList);
+expenseRouter.get('/categorylist', verifyToken,  expensecontroller.getCategoryList);
 expenseRouter.post(
     "/add",
-    upload.single("file"), verifyToken, dbConnect, 
+    upload.single("file"), verifyToken,  
     expensecontroller.addExpense
 );
 
 expenseRouter.post(
     "/update",
-    upload.single("file"), verifyToken, dbConnect, 
+    upload.single("file"), verifyToken,  
     expensecontroller.updateExpense
 );
-expenseRouter.post('/delete', verifyToken, dbConnect, expensecontroller.deleteExpense);
+expenseRouter.post('/delete', verifyToken,  expensecontroller.deleteExpense);
 export { expenseRouter }
