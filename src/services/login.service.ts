@@ -21,6 +21,7 @@ export class loginService {
         //RefresToken store in the DB
         user.refreshToken = refreshToken;
         await user.save();
+        console.log(`user login successfully`);
         return res.status(200).json({
             status: "ok", message: "Login working fine", token, refreshToken, userdetails: {
                 userCode: user.userCode,
