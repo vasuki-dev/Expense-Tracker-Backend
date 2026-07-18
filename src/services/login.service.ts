@@ -14,7 +14,7 @@ export class loginService {
         }
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(401).json({ status: "error", message: "Invalid password" });
+            return res.status(500).json({ status: "error", message: "Invalid password" });
         }
         let token = await JWTToken.generateToken(user);
         let refreshToken = await JWTToken.generateRefreshToken(user);
